@@ -12,22 +12,16 @@ library(dplyr)
 ## converts measurement variables into numeric types
 ## filters the data to our dates of interest (2/1/2007 - 2/2/2007)
 data <- read.table("household_power_consumption.txt", header=TRUE, sep=";", 
-                  na.strings="?", colClasses="character") %>%
-    transmute(date.time = dmy_hms(paste(Date, Time, sep=" ")),
-           global.active.power = as.numeric(Global_active_power),
-           global.reactive.power = as.numeric(Global_reactive_power),
-           voltage = as.numeric(Voltage),
-           global.intensity = as.numeric(Global_intensity),
-           sub.metering.1 = as.numeric(Sub_metering_1),
-           sub.metering.2 = as.numeric(Sub_metering_2),
-           sub.metering.3 = as.numeric(Sub_metering_3)) %>%
-    filter(date.time >= mdy_hms("02-01-2007 00:00:00"),
-           date.time <= mdy_hms("02-02-2007 23:59:59"))
+                   na.strings="?", colClasses="character") %>%
+    mutate(datetime = dmy_hms(paste(Date, Time, sep=" "))) %>%
+    mutate_each(funs(as.numeric), -datetime) %>%
+    filter(datetime >= mdy_hms("02-01-2007 00:00:00"),
+           datetime <= mdy_hms("02-02-2007 23:59:59"))
 
 ## create a graphics device to create .png file
 png(filename="plot2.png")
-## create a histogram, assign the bar colors, main title, and x-axis label
-plot(data$date.time, data$global.active.power, type="l", xlab="",
-     ylab="Global Active Power (kilowatts)")
+## create a line plot, assign the axis labels
+with(data, plot(datetime, Global_active_power, type="l", xlab="",
+                ylab="Global Active Power (kilowatts)"))
 ## close the graphics device
 dev.off()

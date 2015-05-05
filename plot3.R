@@ -13,19 +13,19 @@ library(dplyr)
 ## filters the data to our dates of interest (2/1/2007 - 2/2/2007)
 data <- read.table("household_power_consumption.txt", header=TRUE, sep=";", 
                   na.strings="?", colClasses="character") %>%
-    mutate(date.time = dmy_hms(paste(Date, Time, sep=" "))) %>%
-    mutate_each(funs(as.numeric), -date.time) %>%
-    filter(date.time >= mdy_hms("02-01-2007 00:00:00"),
-           date.time <= mdy_hms("02-02-2007 23:59:59"))
+    mutate(datetime = dmy_hms(paste(Date, Time, sep=" "))) %>%
+    mutate_each(funs(as.numeric), -datetime) %>%
+    filter(datetime >= mdy_hms("02-01-2007 00:00:00"),
+           datetime <= mdy_hms("02-02-2007 23:59:59"))
 
 ## create a graphics device to create .png file
 png(filename="plot3.png")
 ## create a line plot for Sub_metering_1, then add lines for Sub_metering_2 
 ## and Sub_metering_3, assign the line colors and axis labels
-with(data, plot(date.time, Sub_metering_1, type="l", xlab="", 
+with(data, plot(datetime, Sub_metering_1, type="l", xlab="", 
                 ylab="Energy sub metering"))
-with(data, lines(date.time, Sub_metering_2, type="l", col="red"))
-with(data, lines(date.time, Sub_metering_3, type="l", col="blue"))
+with(data, lines(datetime, Sub_metering_2, type="l", col="red"))
+with(data, lines(datetime, Sub_metering_3, type="l", col="blue"))
 ## add a legend to the plot
 legend("topright", lty=1, col=c("black", "red", "blue"), 
        legend=c("Sub_metering_1", "Sub_metering_2", "Sub_metering_3"))
