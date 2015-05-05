@@ -24,7 +24,10 @@ data <- read.table("household_power_consumption.txt", header=TRUE, sep=";",
     filter(date.time >= mdy_hms("02-01-2007 00:00:00"),
            date.time <= mdy_hms("02-02-2007 23:59:59"))
 
+## create a graphics device to create .png file
 png(filename="plot1.png")
+## create a histogram, assign the bar colors, main title, and x-axis label
 hist(data$global.active.power, col="red", main="Global Active Power", 
      xlab="Global Active Power (kilowatts)")
+## close the graphics device
 dev.off()
