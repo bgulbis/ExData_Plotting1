@@ -1,6 +1,7 @@
 ## plot4.R
 ## 
-## create a line plot showing the date/time and energy sub metering
+## create a 2x2 set of plots looking at Global_active_power, Voltage,
+## Sub_metering, and Global_reactive_power
 
 ## use package lubridate for manipulating date and time values
 library(lubridate)
